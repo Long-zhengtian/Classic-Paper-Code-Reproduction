@@ -3,7 +3,7 @@
 # k = 4  # 规则图的度
 N = 1000  # 节点数量
 # m = 2  # BA模型每次加入m条边 z=2m
-PreStep = 1000  # 演化轮数
+PreStep = 10000  # 演化轮数
 CalStep = 100  # 演化PreStep后，进行CalStep步，计算均值
 
 class PayOff_PD():  # 囚徒博弈的得失情况

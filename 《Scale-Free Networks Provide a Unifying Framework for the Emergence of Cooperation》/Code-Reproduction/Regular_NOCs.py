@@ -1,39 +1,30 @@
-from config import *
-class PayOff():
-    def __init__(self, T = 0, R = 0, P = 0, S = 0):
-        self.T = T
-        self.R = R 
-        self.P = P 
-        self.S = S 
+import numpy as np
+import matplotlib.pyplot as plt
 
-class PayOff_PD():  # 囚徒博弈的得失情况
-    T=b
-    R=1
-    P=0
-    S=0
+fig = plt.figure()
+plt.ylabel("frequnency of cooperators")
 
-class PayOff_SG():  # 雪堆博弈的得失情况
-    T=beta
-    R=beta-0.5
-    P=0
-    S=beta-1
+ax1 = plt.subplot(2, 2, 1)
+plt.title("Prisoner’s Dilemma")
 
-print(PayOff_PD.R)
+xpoints = []
+ypoints = []
+# for _k in [4, 16, 32, 64]:
+for _b in np.arange(1, 1.2, 0.025):
+    xpoints.append(_b)
+    ypoints.append(_b)
+plt.plot(xpoints, ypoints, ms = 4)
 
 
-# class PayOff():
-#     def __init__(self, T = 0, R = 0, P = 0, S = 0):
-#         self.T = T
-#         self.R = R 
-#         self.P = P 
-#         self.S = S 
-#     def __call__(self):
-#         return self.T, self.R, self.P, self.S
 
-# class PayOff_PD(PayOff):  # 囚徒博弈的得失情况
-#     def __init__(self):
-#         PayOff(b, 1, 0, 0)
+ax2 = plt.subplot(2, 2, 2)
+plt.title("Snowdrift Game")
 
-# class PayOff_SG(PayOff):  # 雪堆博弈的得失情况
-#     def __init__(self):
-#         PayOff(beta, beta-0.5, 0, beta-1)
+ax3 = plt.subplot(2, 2, 3)
+plt.xlabel("b")
+
+ax4 = plt.subplot(2, 2, 4)
+plt.xlabel("r")
+
+
+plt.show()
