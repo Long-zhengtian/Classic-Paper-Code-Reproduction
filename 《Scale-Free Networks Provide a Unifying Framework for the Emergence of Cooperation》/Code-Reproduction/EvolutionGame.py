@@ -21,11 +21,11 @@ def strategyUpdate(x, y, _PayOff, Game, NOCs):  # 策略的更新过程
         if UpdateProbability > random.random():
             players[y].newStrategy = players[x].strategy 
             
-def EvolutionGameStep(NOCs, Game):  # 一轮演化过程
+def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
     if Game == "PD":
-        _PayOff = PayOff_PD
+        _PayOff = PayOff_PD(bORr)
     elif Game == "SG":
-        _PayOff = PayOff_SG
+        _PayOff = PayOff_SG(bORr)
     else:
         print("Error: GameType {} does not exit".format(Game))
         return
@@ -42,9 +42,9 @@ def EvolutionGameStep(NOCs, Game):  # 一轮演化过程
         players[id].strategy = players[id].newStrategy
         # output2File("output.txt", "a", "players[{}]: {}".format(id, players[id]))
 
-def EvolutionGameProcess(NOCs, Game):
+def EvolutionGameProcess(NOCs, Game, bORr):
     for step in range(PreStep):
-        EvolutionGameStep(NOCs, Game)
+        EvolutionGameStep(NOCs, Game, bORr)
 
     output2File("output.txt", "a", "END!")
     for id in range(N):
