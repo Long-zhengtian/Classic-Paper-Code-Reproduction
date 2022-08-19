@@ -1,6 +1,7 @@
 import random
 from player import players 
 from config import * 
+from output import output2File
 
 def play(x, y, _PayOff):  # 双方进行博弈，返回收益  x,y为index
     if players[x].strategy and players[y].strategy:  # 都合作
@@ -39,11 +40,12 @@ def EvolutionGameStep(NOCs, Game):  # 一轮演化过程
     
     for id in range(N):
         players[id].strategy = players[id].newStrategy
-        
-        # print(players[id])
+        # output2File("output.txt", "a", "players[{}]: {}".format(id, players[id]))
 
 def EvolutionGameProcess(NOCs, Game):
-
-    for step in range(Step):
-        # print("Step:{}".format(step))
+    for step in range(PreStep):
         EvolutionGameStep(NOCs, Game)
+
+    output2File("output.txt", "a", "END!")
+    for id in range(N):
+        output2File("output.txt", "a", "players[{}]: {}".format(id, players[id]))

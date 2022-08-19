@@ -1,5 +1,6 @@
 import random
 from config import *
+from output import output2File
 
 class Player():  # 博弈双方对象
     def __init__(self, index, strategy, newStrategy, AccPayOffs = 0):
@@ -15,7 +16,7 @@ players = []
 
 def playersInit():
     random.seed(0)
-    # print("Init: players")
+    output2File("output.txt", "a", "Init: players")
     players.clear()    
     for index in range(N):
         TempPlayer = Player(index, True if random.random() > 0.5 else False, 0)
