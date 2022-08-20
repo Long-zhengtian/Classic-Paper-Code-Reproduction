@@ -80,3 +80,5 @@ if __name__ == '__main__':
         ax4 = plt.subplot(2, 2, 4)
         plt.xlabel("r")
         plt.plot(xpoint, ypoint)
+        plt.savefig('./PDAndSG.jpg')
+        plt.show()

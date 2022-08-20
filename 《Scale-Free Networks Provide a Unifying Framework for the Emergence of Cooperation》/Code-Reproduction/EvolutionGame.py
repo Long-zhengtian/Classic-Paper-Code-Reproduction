@@ -34,6 +34,7 @@ def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
         return
     # 博弈收益
     for id in range(N):
+        players[id].AccPayOffs = 0  # 每轮都要清零一次
         for friend in NOCs.adj[id]:
             players[id].AccPayOffs += play(id, friend, _PayOff)
     # 策略更新
@@ -57,17 +58,18 @@ def EvolutionGameProcess(NOCs, Game, bORr):
 
     # 计算博弈平衡状态下的均值
     fc = 0
-    for _ in range(CalStep):
-        EvolutionGameStep(NOCs, Game, bORr)
-        fcTemp = 0
-        for id in range(N):
-            # print(players[id].strategy, end = "")
-            if players[id].strategy:
-                fcTemp += 1
-        # print()
-        fc+=fcTemp / N
-        # print(fcTemp/N, end = "")
-        # print()
-    
-    fc /= CalStep
+    for mean in range(MeanStep):
+        meanTemp = 0
+        for _ in range(CalStep):
+            EvolutionGameStep(NOCs, Game, bORr)
+            fcTemp = 0
+            for id in range(N):
+                if players[id].strategy:
+                    fcTemp += 1
+            meanTemp += fcTemp / N
+        meanTemp /= CalStep
+        # print(meanTemp, end="")
+        fc += meanTemp
+    fc /= MeanStep
+    # print()
     return fc    
