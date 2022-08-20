@@ -7,7 +7,6 @@ from EvolutionGame import EvolutionGameProcess
 from output import output2File
 
 def draw():  # 结果绘图
-    
     pass
 
 if __name__ == '__main__':
@@ -16,7 +15,7 @@ if __name__ == '__main__':
     xpoint = []
     ypoint = []
 
-    for _k in [16]: #[4, 16, 32, 64]:
+    for _k in [4, 16, 32, 64]:
         regular_NOCs = nx.random_regular_graph(_k, N)  # 构建一个含有N个节点，每个节点k度的规则图
         print("regular_NOCs, PD")
         xpoint.clear()
@@ -31,8 +30,7 @@ if __name__ == '__main__':
 
         ax1 = plt.subplot(2, 2, 1)
         plt.title("Prisoner’s Dilemma")
-        plt.plot(xpoint, ypoint)
-        
+        plt.plot(xpoint, ypoint, marker = 'o', ms = 3, label = "z = {}".format(_k))
 
         print("regular_NOCs, SG")
         xpoint.clear()
@@ -47,9 +45,10 @@ if __name__ == '__main__':
 
         ax2 = plt.subplot(2, 2, 2)
         plt.title("Snowdrift Game")
-        plt.plot(xpoint, ypoint)
+        plt.plot(xpoint, ypoint, marker = 'o', ms = 3, label = "z = {}".format(_k))
+        plt.legend(loc = 'upper right')
 
-    for _m in [8]: #[2, 4, 8]:
+    for _m in [2, 4, 8]:
         sf_NOCs = nx.barabasi_albert_graph(N, _m)  # 使用BA模型构建一个含有N个节点的无标度网络，每次添加m个边
         print("sf_NOCs, PD")
         xpoint.clear()
@@ -64,7 +63,7 @@ if __name__ == '__main__':
 
         ax3 = plt.subplot(2, 2, 3)
         plt.xlabel("b")
-        plt.plot(xpoint, ypoint)
+        plt.plot(xpoint, ypoint, marker = 'o', ms = 3, label = "z = {}".format(2*_m))
 
         print("sf_NOCs, SG")
         xpoint.clear()
@@ -79,6 +78,8 @@ if __name__ == '__main__':
 
         ax4 = plt.subplot(2, 2, 4)
         plt.xlabel("r")
-        plt.plot(xpoint, ypoint)
-        plt.savefig('./PDAndSG.jpg')
-        plt.show()
+        plt.plot(xpoint, ypoint, marker = 'o', ms = 3, label = "z = {}".format(2*_m))
+        plt.legend(loc = 'upper right')
+        
+    plt.savefig('./PDAndSG.jpg')
+    plt.show()
