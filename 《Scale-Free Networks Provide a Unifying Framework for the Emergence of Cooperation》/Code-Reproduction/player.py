@@ -11,7 +11,6 @@ class Player():  # 博弈双方对象
     def __str__(self):
         return ("Index: {}; Strategy: {}; AccPayOffs: {}".format(self.index, self.strategy, self.AccPayOffs))
 
-
 players = []
 
 def playersInit():

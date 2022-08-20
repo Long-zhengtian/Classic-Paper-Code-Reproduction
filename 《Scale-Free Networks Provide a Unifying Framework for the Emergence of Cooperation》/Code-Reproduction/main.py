@@ -16,7 +16,7 @@ if __name__ == '__main__':
     xpoint = []
     ypoint = []
 
-    for _k in [4]: #[4, 16, 32, 64]:
+    for _k in [16]: #[4, 16, 32, 64]:
         regular_NOCs = nx.random_regular_graph(_k, N)  # 构建一个含有N个节点，每个节点k度的规则图
         print("regular_NOCs, PD")
         xpoint.clear()
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         plt.title("Snowdrift Game")
         plt.plot(xpoint, ypoint)
 
-    for _m in [2]: #[2, 4, 8]:
+    for _m in [8]: #[2, 4, 8]:
         sf_NOCs = nx.barabasi_albert_graph(N, _m)  # 使用BA模型构建一个含有N个节点的无标度网络，每次添加m个边
         print("sf_NOCs, PD")
         xpoint.clear()

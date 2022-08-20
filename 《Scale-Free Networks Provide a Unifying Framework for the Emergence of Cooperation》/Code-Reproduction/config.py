@@ -1,9 +1,9 @@
 # b = 1.5  # 要求b>1
 # beta = 1.5  # 要求beta>1 beta = (1/r +1 )/2
 # k = 4  # 规则图的度
-N = 1000  # 节点数量
+N = 300  # 节点数量
 # m = 2  # BA模型每次加入m条边 z=2m
-PreStep = 5000  # 演化轮数
+PreStep = 2000  # 演化轮数
 CalStep = 100  # 演化PreStep后，进行CalStep步，计算均值
 MeanStep = 10  # MeanStep次游戏取均值
 class PayOff_PD():  # 囚徒博弈的得失情况
