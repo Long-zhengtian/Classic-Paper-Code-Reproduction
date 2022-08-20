@@ -15,6 +15,7 @@ if __name__ == '__main__':
     plt.ylabel("frequnency of cooperators")
     xpoint = []
     ypoint = []
+
     for _k in [4]: #[4, 16, 32, 64]:
         regular_NOCs = nx.random_regular_graph(_k, N)  # 构建一个含有N个节点，每个节点k度的规则图
         print("regular_NOCs, PD")
@@ -37,7 +38,7 @@ if __name__ == '__main__':
         xpoint.clear()
         ypoint.clear()
         for _r in np.arange(0.001, 1, 0.1):
-            output2File("output.txt", "a", "regular_NOCs, SG")
+            output2File("output.txt", "w", "regular_NOCs, SG")
             playersInit()
             fc = EvolutionGameProcess(regular_NOCs, "SG", _r)
             print("k: {}; r: {}; fc:{} ".format(_k, _r, fc))
@@ -54,7 +55,7 @@ if __name__ == '__main__':
         xpoint.clear()
         ypoint.clear()
         for _b in np.arange(1, 2, 0.1):    
-            output2File("output.txt", "a", "sf_NOCs, PD")
+            output2File("output.txt", "w", "sf_NOCs, PD")
             playersInit()
             fc = EvolutionGameProcess(sf_NOCs, "PD", _b)
             print("m: {}; b: {}; fc:{} ".format(_m, _b, fc))
@@ -69,7 +70,7 @@ if __name__ == '__main__':
         xpoint.clear()
         ypoint.clear()
         for _r in np.arange(0.001, 1, 0.1):
-            output2File("output.txt", "a", "sf_NOCs, SG")
+            output2File("output.txt", "w", "sf_NOCs, SG")
             playersInit()
             fc = EvolutionGameProcess(sf_NOCs, "SG", _r)
             print("m: {}; r: {}; fc:{} ".format(_m, _r, fc))
