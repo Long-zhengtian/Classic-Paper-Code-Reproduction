@@ -1,1 +1,6 @@
 data from https://github.com/amarallab/transportation_network_evolution
+
+raw_usair_data/ -- data folder to put raw US air transportation data
+cleaned_brazilbus_data/ -- data folder to put raw Brazil bus transportation data
+features/ -- data folder to put calculated topological features (running raw2features)
+
