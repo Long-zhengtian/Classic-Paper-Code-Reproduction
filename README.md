@@ -5,3 +5,4 @@
 
 * 《Scale-Free Networks Provide a Unifying Framework for the Emergence of Cooperation》  演化博弈论  复杂网络
 * 《Forecasting the evolution of fast-changing transportation networks using machine learning》 复杂网络  机器学习  **尚未完成**
+* 《Social diversity promotes the emergence of cooperation in public goods games》 复杂网络 演化博弈论 公共品博弈 **尚未完成**
