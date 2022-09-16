@@ -50,16 +50,26 @@ def PGGEStep(NOCs, GorI, r):  # 一步博弈演化
     for id in range(N):  # 演化
         strategyUpdate(id, NOCs)
 
+    TempC = 0
     for id in range(N):  # 策略更新
         players[id].strategy = players[id].newStrategy
+        if players[id].strategy:
+            TempC += 1
+    return TempC
 
 
 def PGGEProcess(NOCs, GorI, r):
     # 公共品博弈演化过程  GorI表示fixed cost per game or fixed cost per individual, True表示Game
     for _ in range(PreStep):  # 前置演化过程
         PGGEStep(NOCs, GorI, r)
+        print("PreStep: {}".format(_))
 
+    SumMean = 0
     for _mean in range(MeanStep):
+        SumCal = 0
         for _cal in range(CalStep):
-            PGGEStep(NOCs, GorI, r)
-
+            SumCal += PGGEStep(NOCs, GorI, r)
+        SumCal /= CalStep
+        SumMean += SumCal
+    SumMean /= CalStep
+    return SumMean
