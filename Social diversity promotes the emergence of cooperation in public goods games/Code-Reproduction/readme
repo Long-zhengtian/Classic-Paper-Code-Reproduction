@@ -1,0 +1,4 @@
+config.py: 存储部分常量
+PGGE.py: 公共品演化博弈主程序
+player.py: 博弈个体
+main.py: 入口
