@@ -14,8 +14,7 @@ if __name__ == '__main__':
         r = eta * (2 * m + 1)
         SumGraphG = 0
         SumGraphI = 0
-        for _ in range(DiffGraph):  # 重构10次图
-            playersInit()
+        for _ in range(DiffGraph):  # 重构图
             regular_NOCs = nx.random_regular_graph(2*m, N)  # 构建一个含有N个节点，每个节点2*m度的规则图
             SumGraphG += PGGEProcess(regular_NOCs, True, r)
             SumGraphI += PGGEProcess(regular_NOCs, False, r)
@@ -32,7 +31,6 @@ if __name__ == '__main__':
         SumGraphG = 0
         SumGraphI = 0
         for _ in range(DiffGraph):
-            playersInit()
             sf_NOCs = nx.barabasi_albert_graph(N, m)  # 使用BA模型构建一个含有N个节点的无标度网络，每次添加m个边
             SumGraphG += PGGEProcess(sf_NOCs, True, r)
             SumGraphI += PGGEProcess(sf_NOCs, False, r)
