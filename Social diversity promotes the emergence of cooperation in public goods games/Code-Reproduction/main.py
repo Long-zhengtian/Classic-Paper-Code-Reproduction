@@ -17,7 +17,7 @@ if __name__ == '__main__':
         r = eta * (2 * m + 1)
         SumGraphG = 0
         SumGraphI = 0
-        for _ in range(DiffGraph):  # 重构图
+        for _ in range(DiffGraph):  # 构建DiffGraph次不同的图，结果取均值
             regular_NOCs = nx.random_regular_graph(2*m, N)  # 构建一个含有N个节点，每个节点2*m度的规则图
             SumGraphG += PGGEProcess(regular_NOCs, True, r)
             SumGraphI += PGGEProcess(regular_NOCs, False, r)
@@ -58,6 +58,6 @@ if __name__ == '__main__':
     ax2 = plt.subplot(2, 1, 2)
     plt.plot(xpoint, ypointI, marker='*', ms=5)
 
-    plt.savefig('./PGG1.jpg')
+    plt.savefig('./PGG2.jpg')
     plt.show()
 
