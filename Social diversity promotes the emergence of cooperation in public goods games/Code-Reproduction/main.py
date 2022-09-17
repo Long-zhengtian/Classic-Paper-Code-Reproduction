@@ -58,6 +58,6 @@ if __name__ == '__main__':
     ax2 = plt.subplot(2, 1, 2)
     plt.plot(xpoint, ypointI, marker='*', ms=5)
 
-    plt.savefig('./PGG2.jpg')
+    plt.savefig('./PGG1.jpg')
     plt.show()
 

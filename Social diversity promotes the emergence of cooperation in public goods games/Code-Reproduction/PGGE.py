@@ -75,7 +75,6 @@ def PGGEProcess(NOCs, GorI, r):
         for _ in range(PreStep):  # 前置演化过程
             PGGEStep(NOCs, GorI, r)
             bar()
-    # print("PreStep END")
 
     print("Cal: ")
     SumMean = 0
