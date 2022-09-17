@@ -2,15 +2,18 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 
+from output import output2File
 from config import *
-from player import players, playersInit
 from PGGE import PGGEProcess
 
 if __name__ == '__main__':
     fig = plt.figure()
     plt.ylabel("frequnency of cooperators")
-
-    for eta in np.arange(0.2, 1.1, 0.1):  # 正规化的增强因子 r = eta * (k + 1)
+    xpoint = []
+    ypointG = []
+    ypointI = []
+    for eta in np.arange(0.2, 1.1, 0.05):  # 正规化的增强因子 r = eta * (k + 1)
+        xpoint.append(eta)
         r = eta * (2 * m + 1)
         SumGraphG = 0
         SumGraphI = 0
@@ -18,16 +21,24 @@ if __name__ == '__main__':
             regular_NOCs = nx.random_regular_graph(2*m, N)  # 构建一个含有N个节点，每个节点2*m度的规则图
             SumGraphG += PGGEProcess(regular_NOCs, True, r)
             SumGraphI += PGGEProcess(regular_NOCs, False, r)
+
         SumGraphG /= DiffGraph
-        ax1 = plt.subplot(2, 2, 1)
-        plt.plot(eta, SumGraphG, marker='o', ms=3)
-        print("Regular_NOCs, eta: {}; SumGraphG: {}".format(eta, SumGraphG))
+        ypointG.append(SumGraphG)
+        output2File("output.txt", "a", "Regular_NOCs, eta: {}; SumGraphG: {}".format(eta, SumGraphG))
 
         SumGraphI /= DiffGraph
-        ax2 = plt.subplot(2, 2, 2)
-        plt.plot(eta, SumGraphI, marker='o', ms=3)
-        print("Regular_NOCs, eta: {}; SumGraphI: {}".format(eta, SumGraphI))
+        ypointI.append(SumGraphI)
+        output2File("output.txt", "a", "Regular_NOCs, eta: {}; SumGraphI: {}".format(eta, SumGraphI))
 
+    ax1 = plt.subplot(2, 1, 1)
+    plt.plot(xpoint, ypointG, marker='o', ms=5)
+    ax2 = plt.subplot(2, 1, 2)
+    plt.plot(xpoint, ypointI, marker='o', ms=5)
+
+    ypointI.clear()
+    ypointG.clear()
+    for eta in np.arange(0.2, 1.1, 0.05):  # 正规化的增强因子 r = eta * (k + 1)
+        r = eta * (2 * m + 1)
         SumGraphG = 0
         SumGraphI = 0
         for _ in range(DiffGraph):
@@ -35,15 +46,18 @@ if __name__ == '__main__':
             SumGraphG += PGGEProcess(sf_NOCs, True, r)
             SumGraphI += PGGEProcess(sf_NOCs, False, r)
         SumGraphG /= DiffGraph
-        ax3 = plt.subplot(2, 2, 3)
-        plt.plot(eta, SumGraphG, marker='*', ms=3)
-        print("SF_NOCs, eta: {}; SumGraphG: {}".format(eta, SumGraphG))
+        ypointG.append(SumGraphG)
+        output2File("output.txt", "a", "SF_NOCs, eta: {}; SumGraphG: {}".format(eta, SumGraphG))
 
         SumGraphI /= DiffGraph
-        ax4 = plt.subplot(2, 2, 4)
-        plt.plot(eta, SumGraphI, marker='*', ms=3)
-        print("SF_NOCs, eta: {}; SumGraphI: {}".format(eta, SumGraphI))
+        ypointI.append(SumGraphI)
+        output2File("output.txt", "a", "SF_NOCs, eta: {}; SumGraphI: {}".format(eta, SumGraphI))
 
-    plt.savefig('./PGG.jpg')
+    ax1 = plt.subplot(2, 1, 1)
+    plt.plot(xpoint, ypointG, marker='*', ms=5)
+    ax2 = plt.subplot(2, 1, 2)
+    plt.plot(xpoint, ypointI, marker='*', ms=5)
+
+    plt.savefig('./PGG2.jpg')
     plt.show()
 

@@ -6,12 +6,13 @@ import random
 import time
 from config import *
 from player import players, playersInit
+from alive_progress import alive_bar
 
 
-def PGG(x, NOCs, GorI, r):  # 以x为中心展开公共品博弈，此处代码可以优化，似乎有些问题？
-    GoodsPool = 0  # 公共品
+def PGG(x, NOCs, GorI, r):  # 以x为中心展开公共品博弈
+    GoodsPool = 0  # 公共池
     if GorI:  # game
-        cost = c * players[x].strategy
+        cost = c * players[x].strategy  # strategy = 1 or 0
         players[x].AccPayOffs -= cost
         GoodsPool += cost
         for y in NOCs.adj[x]:
@@ -35,10 +36,13 @@ def PGG(x, NOCs, GorI, r):  # 以x为中心展开公共品博弈，此处代码�
 def strategyUpdate(x, NOCs):  # 策略更新
     y = random.choice(list(NOCs.adj[x]))
     if players[y].AccPayOffs > players[x].AccPayOffs:
-        # 正则化 未完成
-        k_max = max(NOCs.degree[x], NOCs.degree[y])
-        UpdateProbability = (players[y].AccPayOffs - players[x].AccPayOffs) / (k_max)
-        # print("Py-Px: {}; D: {}; k_max: {}; UpdateProbability: {}".format(players[y].AccPayOffs - players[x].AccPayOffs, D, k_max, UpdateProbability))
+
+        MaxPayOffs = players[x].AccPayOffs
+        for id in NOCs.adj[x]:
+            MaxPayOffs = max(MaxPayOffs, players[id].AccPayOffs)
+        M = MaxPayOffs - players[x].AccPayOffs
+
+        UpdateProbability = (players[y].AccPayOffs - players[x].AccPayOffs) / M
         if UpdateProbability > random.random():
             players[x].newStrategy = players[y].strategy
             # print("strategy :{}".format(players[x].newStrategy))
@@ -47,11 +51,7 @@ def strategyUpdate(x, NOCs):  # 策略更新
     # print("strategy :{}".format(players[x].newStrategy))
 
 
-def PGGEStep(NOCs, GorI, r):  # 一步博弈演化
-    for id in range(N):  # 清零AccPayOffs
-        players[id].AccPayOffs = 0
-        # print("strategy: {}".format(players[id].strategy))
-
+def PGGEStep(NOCs, GorI, r):  # 一步博弈演化, 返回这代的合作比
     for id in range(N):  # 博弈
         PGG(id, NOCs, GorI, r)
 
@@ -59,30 +59,35 @@ def PGGEStep(NOCs, GorI, r):  # 一步博弈演化
         strategyUpdate(id, NOCs)
 
     TempC = 0
-    for id in range(N):  # 策略更新
+    for id in range(N):  # 本代结束，策略更新以及收益清零
         players[id].strategy = players[id].newStrategy
         TempC += players[id].strategy
-    print("TempC: {}".format(TempC))
-    return TempC
+        players[id].AccPayOffs = 0
+    return TempC / N
 
 
 def PGGEProcess(NOCs, GorI, r):
     # 公共品博弈演化过程  GorI表示fixed cost per game or fixed cost per individual, True表示Game
     playersInit()
-    # for id in range(N):  # 这里没问题
-    #     print("PGGEProcess 1 strategy: {}".format(players[id].strategy))
 
-    for _ in range(PreStep):  # 前置演化过程
-        PGGEStep(NOCs, GorI, r)
+    print("PreStep: ")
+    with alive_bar(PreStep, force_tty=True) as bar:
+        for _ in range(PreStep):  # 前置演化过程
+            PGGEStep(NOCs, GorI, r)
+            bar()
     # print("PreStep END")
 
+    print("Cal: ")
     SumMean = 0
-    for _mean in range(MeanStep):
-        SumCal = 0
-        # print("MeanStep: {}".format(_mean))
-        for _cal in range(CalStep):
-            SumCal += PGGEStep(NOCs, GorI, r)
-        SumCal /= CalStep
-        SumMean += SumCal
-    SumMean /= CalStep
+    with alive_bar(MeanStep * CalStep, force_tty=True) as bar:
+        for _mean in range(MeanStep):
+            SumCal = 0
+            # print("MeanStep: {}".format(_mean))
+            for _cal in range(CalStep):
+                SumCal += PGGEStep(NOCs, GorI, r)
+                bar()
+            SumCal /= CalStep
+            SumMean += SumCal
+    SumMean /= MeanStep
     return SumMean
+

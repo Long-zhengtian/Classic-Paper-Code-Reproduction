@@ -2,3 +2,10 @@ config.py: 存储部分常量
 PGGE.py: 公共品演化博弈主程序
 player.py: 博弈个体
 main.py: 入口
+
+PGG:
+N = 300  # 节点数量
+PreStep = 3000  # 前置演化 10000
+CalStep = 200  # PreStep之后演化CalStep取平均值 2000
+MeanStep = 10  # 100次运行结果取均值 100
+DiffGraph = 3  # 10中不同的图进行运算 10
