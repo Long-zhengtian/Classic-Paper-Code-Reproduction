@@ -67,22 +67,17 @@ def PGGEProcess(NOCs, GorI, r):
     # 公共品博弈演化过程  GorI表示fixed cost per game or fixed cost per individual, True表示Game
     playersInit()
 
-    print("PreStep: ")
-    with alive_bar(PreStep, force_tty=True) as bar:
-        for _ in range(PreStep):  # 前置演化过程
-            PGGEStep(NOCs, GorI, r)
-            bar()
-
-    print("Cal: ")
-    SumMean = 0
-    with alive_bar(MeanStep * CalStep, force_tty=True) as bar:
+    with alive_bar(MeanStep * (PreStep + CalStep), force_tty=True) as bar:
+        SumMean = 0
         for _mean in range(MeanStep):
+            for _ in range(PreStep):  # 前置演化过程
+                PGGEStep(NOCs, GorI, r)
+                bar()
             SumCal = 0
-            # print("MeanStep: {}".format(_mean))
-            for _cal in range(CalStep):
+            for _cal in range(CalStep):  # 计算平衡后CalStep步的均值
                 SumCal += PGGEStep(NOCs, GorI, r)
                 bar()
             SumCal /= CalStep
             SumMean += SumCal
-    SumMean /= MeanStep
+        SumMean /= MeanStep
     return SumMean
