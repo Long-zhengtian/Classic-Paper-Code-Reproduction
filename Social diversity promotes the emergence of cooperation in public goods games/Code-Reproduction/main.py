@@ -8,7 +8,6 @@ from PGGE import PGGEProcess
 
 if __name__ == '__main__':
     fig = plt.figure()
-    plt.ylabel("frequnency of cooperators")
     xpoint = []
     ypointG = []
     ypointI = []
@@ -58,6 +57,6 @@ if __name__ == '__main__':
     ax2 = plt.subplot(2, 1, 2)
     plt.plot(xpoint, ypointI, marker='*', ms=5)
 
-    plt.savefig('./PGG2.jpg')
+    plt.savefig('./PGG.jpg')
     plt.show()
 
