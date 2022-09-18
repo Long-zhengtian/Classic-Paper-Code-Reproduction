@@ -47,29 +47,23 @@ def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
         players[id].strategy = players[id].newStrategy
         if players[id].strategy:
             Temp += 1
-        # output2File("output.txt", "a", "players[{}]: {}".format(id, players[id]))
-        
     output2File("output.txt", "a", "TempCooperators: {}".format(Temp))
+    return Temp / N
 
 def EvolutionGameProcess(NOCs, Game, bORr):
-    # 前置演化博弈过程，保证到达博弈平衡状态
-    for _ in range(PreStep):
-        EvolutionGameStep(NOCs, Game, bORr)
-
-    # 计算博弈平衡状态下的均值
-    fc = 0
+    meanTemp = 0
     for mean in range(MeanStep):
-        meanTemp = 0
-        for _ in range(CalStep):
+        # 前置演化博弈过程，保证到达博弈平衡状态
+        for _ in range(PreStep):
             EvolutionGameStep(NOCs, Game, bORr)
-            fcTemp = 0
-            for id in range(N):
-                if players[id].strategy:
-                    fcTemp += 1
-            meanTemp += fcTemp / N
-        meanTemp /= CalStep
+
+        # 计算博弈平衡状态下的均值
+        fc = 0
+        for _ in range(CalStep):
+            fc += EvolutionGameStep(NOCs, Game, bORr)
+        fc /= CalStep
         # print(meanTemp, end="")
-        fc += meanTemp
-    fc /= MeanStep
+        meanTemp += fc
+    meanTemp /= MeanStep
     # print()
-    return fc    
+    return meanTemp

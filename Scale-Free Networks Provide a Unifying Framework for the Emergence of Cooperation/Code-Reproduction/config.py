@@ -4,7 +4,7 @@
 N = 300  # 节点数量
 # m = 2  # BA模型每次加入m条边 z=2m
 PreStep = 2000  # 演化轮数
-CalStep = 100  # 演化PreStep后，进行CalStep步，计算均值
+CalStep = 200  # 演化PreStep后，进行CalStep步，计算均值
 MeanStep = 10  # MeanStep次游戏取均值
 class PayOff_PD():  # 囚徒博弈的得失情况
     def __init__(self, b = 1.5):
