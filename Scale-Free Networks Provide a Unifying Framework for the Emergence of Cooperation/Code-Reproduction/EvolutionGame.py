@@ -55,7 +55,8 @@ def EvolutionGameProcess(NOCs, Game, bORr):
     for mean in range(MeanStep):
         # 前置演化博弈过程，保证到达博弈平衡状态
         for _ in range(PreStep):
-            EvolutionGameStep(NOCs, Game, bORr)
+            fc = EvolutionGameStep(NOCs, Game, bORr)
+            print(fc)
 
         # 计算博弈平衡状态下的均值
         fc = 0

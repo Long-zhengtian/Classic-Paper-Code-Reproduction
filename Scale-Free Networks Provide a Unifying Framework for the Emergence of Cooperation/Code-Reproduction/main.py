@@ -9,6 +9,7 @@ from output import output2File
 def draw():  # 结果绘图
     pass
 
+
 if __name__ == '__main__':
     fig = plt.figure()
     plt.ylabel("frequnency of cooperators")
@@ -61,25 +62,8 @@ if __name__ == '__main__':
             xpoint.append(_b)
             ypoint.append(fc)
 
-        ax3 = plt.subplot(2, 2, 3)
-        plt.xlabel("b")
         plt.plot(xpoint, ypoint, marker = 'o', ms = 3, label = "z = {}".format(2*_m))
 
-        print("sf_NOCs, SG")
-        xpoint.clear()
-        ypoint.clear()
-        for _r in np.arange(0.001, 1, 0.1):
-            output2File("output.txt", "w", "sf_NOCs, SG")
-            playersInit()
-            fc = EvolutionGameProcess(sf_NOCs, "SG", _r)
-            print("m: {}; r: {}; fc:{} ".format(_m, _r, fc))
-            xpoint.append(_r)
-            ypoint.append(fc)
-
-        ax4 = plt.subplot(2, 2, 4)
-        plt.xlabel("r")
-        plt.plot(xpoint, ypoint, marker = 'o', ms = 3, label = "z = {}".format(2*_m))
-        plt.legend(loc = 'upper right')
         
-    plt.savefig('./PDAndSG.jpg')
+    plt.savefig('./PDAndSG2.jpg')
     plt.show()
