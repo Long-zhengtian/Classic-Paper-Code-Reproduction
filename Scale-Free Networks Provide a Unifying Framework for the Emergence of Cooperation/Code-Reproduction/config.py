@@ -3,7 +3,7 @@
 # k = 4  # 规则图的度
 N = 300  # 节点数量
 # m = 2  # BA模型每次加入m条边 z=2m
-PreStep = 2000  # 演化轮数
+PreStep = 4000  # 演化轮数
 CalStep = 200  # 演化PreStep后，进行CalStep步，计算均值
 MeanStep = 10  # MeanStep次游戏取均值
 

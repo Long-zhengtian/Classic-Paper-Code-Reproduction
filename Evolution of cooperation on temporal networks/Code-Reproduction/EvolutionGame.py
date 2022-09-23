@@ -59,8 +59,8 @@ def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
 
 
 def EvolutionGameProcess(NOCs, Game, bORr, prob, g):
-    MeanTemp = 0.0
-    for _ in range(MeanStep):
+    fc = 0.0
+    for _ in range(EG_Rounds):
         GTemp = 0.0
         for _i in range(G1+G2):
             snapshot = copy.deepcopy(NOCs)
@@ -68,11 +68,11 @@ def EvolutionGameProcess(NOCs, Game, bORr, prob, g):
                 if prob > random.random():
                     snapshot.remove_edge(e[0], e[1])
             for _j in range(_i, min(_i+g, G1+G2)):
-                _fc = EvolutionGameStep(snapshot, Game, bORr)
+                mean = EvolutionGameStep(snapshot, Game, bORr)
                 if _j > G1:
-                    GTemp += _fc
+                    GTemp += mean
             _i += g - 1
         GTemp /= G2
-        MeanTemp += GTemp
-    MeanTemp /= MeanStep
-    return MeanTemp
+        fc += GTemp
+    fc /= EG_Rounds
+    return fc

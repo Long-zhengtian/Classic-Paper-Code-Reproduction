@@ -6,7 +6,7 @@ G1 = 10000  # 一共前置演化G1轮
 G2 = 2000  # 平衡后，演化G2轮
 # g = 10  # 一个snapshot演化的轮数
 DiffGraph = 10  # 跑DiffGraph个不同的图，取平均值
-MeanStep = 20  # 每个图跑MeanStep次
+EG_Rounds = 20  # 每个图跑MeanStep次
 
 
 class PayOff_PD:  # 囚徒博弈的得失情况

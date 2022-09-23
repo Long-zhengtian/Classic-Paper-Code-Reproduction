@@ -17,7 +17,7 @@ os.environ['PYTHONHASHSEED'] = str(seed_value)
 
 if __name__ == '__main__':
 
-    for _g in [10, 100, 1000, G]:
+    for _g in [10, 100, 1000, G1+G2]:
         for _b in np.arange(1, 2, 0.1):
             for _p in [0.3, 0.8]:
                 fc_ER = fc_SF = 0
