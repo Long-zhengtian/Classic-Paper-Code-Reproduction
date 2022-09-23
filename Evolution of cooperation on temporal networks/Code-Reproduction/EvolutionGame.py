@@ -1,5 +1,6 @@
 import random
 import copy
+
 from player import players 
 from config import * 
 from output import output2File
@@ -57,19 +58,21 @@ def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
     return Temp / N
 
 
-def EvolutionGameProcess(NOCs, Game, bORr):
-    fc = 0
-    for _ in range(g):
-        fc = EvolutionGameStep(NOCs, Game, bORr)
-    return fc  # 只传递回当前snapshot运行最后一次的合作频率
-
-
-def temporal_network(NOCs, Game, bORr, prob, g):
-    for _i in range(G):
-        snapshot = copy.deepcopy(NOCs)
-        for e in snapshot.edges():  # 以概率p随机删边
-            if prob > random.random():
-                snapshot.remove_edge(e[0], e[1])
-        for _j in range(_i, min(_i+g, G)):
-            pass
-        _fc = EvolutionGameProcess(snapshot, Game, bORr)
+def EvolutionGameProcess(NOCs, Game, bORr, prob, g):
+    MeanTemp = 0.0
+    for _ in range(MeanStep):
+        GTemp = 0.0
+        for _i in range(G1+G2):
+            snapshot = copy.deepcopy(NOCs)
+            for e in snapshot.edges():  # 以概率p随机删边
+                if prob > random.random():
+                    snapshot.remove_edge(e[0], e[1])
+            for _j in range(_i, min(_i+g, G1+G2)):
+                _fc = EvolutionGameStep(snapshot, Game, bORr)
+                if _j > G1:
+                    GTemp += _fc
+            _i += g - 1
+        GTemp /= G2
+        MeanTemp += GTemp
+    MeanTemp /= MeanStep
+    return MeanTemp
