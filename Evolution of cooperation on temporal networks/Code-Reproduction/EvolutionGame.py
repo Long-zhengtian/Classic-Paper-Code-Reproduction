@@ -1,5 +1,6 @@
 import random
 import copy
+import networkx
 
 from player import players 
 from config import * 
@@ -76,3 +77,9 @@ def EvolutionGameProcess(NOCs, Game, bORr, prob, g):
         fc += GTemp
     fc /= EG_Rounds
     return fc
+
+def test(NOCs:networkx.classes.graph.Graph,a:int):
+    print(type(NOCs))
+
+    a=NOCs.degree[0]
+    print(a)
