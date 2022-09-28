@@ -1,65 +1,78 @@
-import networkx   as nx
-import numpy      as np
-import random     as rnd
-import multiprocessing
-from multiprocessing import Pool
-from functools import partial
-
-# Generates random graph
-def gen_rnd_graph(nv, ne):
-    G = nx.gnm_random_graph(nv, ne, seed=None, directed=False)
-
-    for s, t in G.edges():
-        G[s][t]['weight'] = rnd.random()
-
-    return G
+@jit(nopython=True)
+def sum_matrix(A):
+    N = A.shape[0]
+    cnt = 0
+    for i in np.arange(N):
+        for j in np.arange(N):
+            cnt += A[i, j]
+    return cnt
 
 
-# Generates random time-varying graph
-def gen_time_graph(nv, ne, ng):
-    # Initialise list of graphs
-    l = []
-
-    for i in range(ng):
-        gi = gen_rnd_graph(nv, ne)
-        l.append(gi)
-
-    return l
+@jit(nopython=True)
+def sum_vevtor(a):
+    N = len(a)
+    cnt = 0
+    for i in np.arange(N):
+        cnt += a[i]
+    return cnt
 
 
-# Computes adjacency matrix for snaphot of time-varying graph
-def adj_mtrx(Gk,a):
-    Ak = nx.to_numpy_array(Gk, weight=1)  # weight parameter make sure adj is 1 instead of actual weight
-    print(Gk.degree[1])
-    return Ak
+
+@jit(nopython=True)
+def prefer_attach_proportional_to_degree(degrees) :
+    choose_array = List()
+    length = len(degrees)
+    for index in np.arange(length):
+        degree = degrees[index]
+        if degree != 0:
+            for i in np.arange(degree):
+                choose_array.append(index)
+    length = len(choose_array)
+    random_number = randint(0, length - 1)
+    choice_node = choose_array[random_number]
+    return choice_node
 
 
-def main():
-    num_of_processes = multiprocessing.cpu_count() // 2
-    print('num_of_process={}'.format(num_of_processes))
+"""
+aver_k must be even
+"""
+@jit(nopython=True)
+def scale_free_matrix(N, k):
+    static_matrix = np.zeros((N, N), dtype=np.int64)
+    for i in np.arange(2*k-1):
+        static_matrix[i, i+1] = 1
+        static_matrix[i+1, i] = 1
+    degrees = np.zeros(N, dtype=np.int64)
+    while 1:
+        nodex = randint(0, 2*k-1)
+        nodey = randint(0, 2*k-1)
+        print(nodex,nodey)
+        if nodex != nodey:
+            static_matrix[nodex, nodey] = 1
+            static_matrix[nodey, nodex] = 1
+        print(sum_matrix(static_matrix))
+        if sum_matrix(static_matrix) == 2*k*k:
+            break
+    for i in np.arange(N):
+        degrees[i] = sum_vevtor(static_matrix[i])
+    for i in np.arange(2*k, N):
+        while 1:
+            choice_node = prefer_attach_proportional_to_degree(degrees)
+            static_matrix[i,choice_node] = 1
+            static_matrix[choice_node,i] = 1
+            print(i,(i+1)*k,k,sum_matrix(static_matrix))
+            if sum_matrix(static_matrix) == (i+1)*k:
+                print('break')
+                break
+        for j in np.arange(N):
+            degrees[j] = sum_vevtor(static_matrix[j])
+    return static_matrix
 
-    # -----------------------------------------------------------------------
-    # Specify constants
-    # -----------------------------------------------------------------------
-    NV = 10  # no. of vertices
-    NE = 15  # no. of edges
-    NG = 3  # no. of snapshot graphs
 
-    # -----------------------------------------------------------------------
-    # Generate random time-varying graph
-    # -----------------------------------------------------------------------
-    # Gt2 = nx.erdos_renyi_graph(100, 0.6)
-    Gt = gen_time_graph(NV, NE, NG)
-    print(Gt)
-    with Pool(num_of_processes) as p:
-        pt = partial(adj_mtrx, a=1)
-        At = p.map(pt, Gt)
-
-    # for k in range(NG):
-    #     print(Gt[k].edges())
-    #     print(At[k])
-    #     print('==========')
-
-
-if __name__ == '__main__':
-    main()
+@jit(nopython=True)
+def cycle_matrix(N, k):
+    static_matrix = np.zeros((N, N))
+    for i in range(N):
+        static_matrix[i, (N+i+1+np.arange(int(k/2)))%N] = 1
+        static_matrix[i, (N+i+1-np.arange(int(k/2)))%N] = 1
+    return static_matrix

@@ -2,7 +2,6 @@ import random
 from player import players 
 from config import * 
 from output import output2File
-from numba import jit
 from alive_progress import alive_bar
 
 def play(x, y, _PayOff):  # 双方进行博弈，返回收益  x,y为index
@@ -27,7 +26,6 @@ def strategyUpdate(x, y, _PayOff, Game, NOCs):  # 策略的更新过程
     players[x].newStrategy = players[x].strategy 
 
 
-@jit
 def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
     if Game == "PD":
         _PayOff = PayOff_PD(bORr)
@@ -55,7 +53,6 @@ def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
     return Temp / N
 
 
-@jit
 def EvolutionGameProcess(NOCs, Game, bORr):
     meanTemp = 0
     # with alive_bar(MeanStep * (PreStep + CalStep), force_tty=True) as bar:

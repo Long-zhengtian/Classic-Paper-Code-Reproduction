@@ -1,10 +1,15 @@
 import random
 import copy
+import string
+import tqdm
 import networkx
-
-from player import players 
+# import taichi as ti
+# import taichi.math as tm
+# from numba import jit
+from player import players, playersInit
 from config import * 
 from output import output2File
+from alive_progress import alive_bar
 
 
 def play(x, y, _PayOff):  # 双方进行博弈，返回收益  x,y为index
@@ -29,6 +34,9 @@ def strategyUpdate(x, y, _PayOff, Game, NOCs):  # 策略的更新过程
     players[x].newStrategy = players[x].strategy 
 
 
+# @jit(float64(Graph, string, float64))
+# @jit(nopython=True)
+# @ti.func()
 def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
     if Game == "PD":
         _PayOff = PayOff_PD(bORr)
@@ -36,7 +44,7 @@ def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
         _PayOff = PayOff_SG(bORr)
     else:
         print("Error: GameType {} does not exit".format(Game))
-        return
+        return 0
 
     # 博弈收益
     for _id in range(N):
@@ -49,37 +57,36 @@ def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
             friend = random.choice(list(NOCs.adj[_id]))
             strategyUpdate(_id, friend, _PayOff, Game, NOCs)
     
-    Temp = 0
+    Temp = int(0)
     for _id in range(N):
         players[_id].AccPayOffs = 0  # 每轮都要清零一次
         players[_id].strategy = players[_id].newStrategy
         if players[_id].strategy:
             Temp += 1
-    output2File("output.txt", "a", "TempCooperators: {}".format(Temp))
+    # output2File("output.txt", "a", "TempCooperators: {}".format(Temp))
     return Temp / N
 
 
-def EvolutionGameProcess(NOCs, Game, bORr, prob, g):
-    fc = 0.0
-    for _ in range(EG_Rounds):
-        GTemp = 0.0
-        for _i in range(G1+G2):
-            snapshot = copy.deepcopy(NOCs)
-            for e in snapshot.edges():  # 以概率p随机删边
-                if prob > random.random():
-                    snapshot.remove_edge(e[0], e[1])
-            for _j in range(_i, min(_i+g, G1+G2)):
-                mean = EvolutionGameStep(snapshot, Game, bORr)
-                if _j > G1:
-                    GTemp += mean
-            _i += g - 1
-        GTemp /= G2
-        fc += GTemp
+# @jit(float64(Graph, string, float64, float64, float64))
+# @jit(nopython=True)
+# @ti.kernel()
+def EvolutionGameProcess(NOCs, Game, g, bORr, prob):
+    fc = 0.
+    with alive_bar(EG_Rounds * (G1 + G2), force_tty=True) as bar:
+        for _ in range(EG_Rounds):
+            GTemp = 0.
+            for _i in range(G1+G2):
+                bar()
+                snapshot = copy.deepcopy(NOCs)
+                for e in snapshot.edges():  # 以概率p随机删边
+                    if prob > random.random():
+                        snapshot.remove_edge(e[0], e[1])
+                for _j in range(_i, min(_i+g, G1+G2)):
+                    mean = EvolutionGameStep(snapshot, Game, bORr)
+                    if _j > G1:
+                        GTemp += mean
+                _i += g - 1
+            GTemp /= G2
+            fc += GTemp
     fc /= EG_Rounds
     return fc
-
-def test(NOCs:networkx.classes.graph.Graph,a:int):
-    print(type(NOCs))
-
-    a=NOCs.degree[0]
-    print(a)

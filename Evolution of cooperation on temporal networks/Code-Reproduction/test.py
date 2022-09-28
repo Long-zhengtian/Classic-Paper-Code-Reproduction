@@ -9,7 +9,7 @@ from pathos.multiprocessing import ProcessPool as Pool
 #import multiprocessing
 #from multiprocessing import pool, process
 from config import *
-from EvolutionGame import EvolutionGameProcess, test
+from EvolutionGame import EvolutionGameProcess
 from player import playersInit, players
 from alive_progress import alive_bar
 from functools import partial
@@ -30,14 +30,12 @@ if __name__ == '__main__':
                 for _Graph in range(DiffGraph):
                     NOCs_ER = nx.erdos_renyi_graph(N, ER_p)
                     NOCs_SF = nx.barabasi_albert_graph(N, m)
-                    # print(type(NOCs_SF))
-                    # pt = partial(EvolutionGameProcess, Game="PD", bORr=_b, prob=_p, g=_g)
-                    # fc_ER += pool.map(pt, NOCs_ER)
-                    # fc_SF += pool.map(pt, NOCs_SF)
-                    pt = partial(test,a=1)
-                    pool.map(pt,NOCs_ER)
-                    # alist = [NOCs_ER, "PD", _b, _p, _g]
-                    # fc_ER += pool.map(EvolutionGameProcess, alist)
+
+                    pt = partial(EvolutionGameProcess, Game="PD", bORr=_b, prob=_p, g=_g)
+                    NOCs_list = [NOCs_ER, NOCs_SF]
+                    fc1, fc2 = pool.map(pt, NOCs_list)
+                    fc_ER += fc1
+                    fc_SF += fc2
                     # fc_ER += EvolutionGameProcess(NOCs_ER, "PD", _b, _p, _g)  # 均为囚徒博弈
                     # fc_SF += EvolutionGameProcess(NOCs_SF, "PD", _b, _p, _g)
                 fc_ER /= DiffGraph
@@ -45,6 +43,6 @@ if __name__ == '__main__':
 
     pool.close()
     pool.join()
-    plt.savefig('./temporal_network.jpg')
+    plt.savefig('./temporal_network_multi.jpg')
     plt.show()
 

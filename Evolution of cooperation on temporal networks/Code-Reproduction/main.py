@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+from numba import jit
 from multiprocessing import pool
+from output import output2File
 from config import *
 from EvolutionGame import EvolutionGameProcess
 from player import playersInit, players
@@ -16,20 +18,29 @@ os.environ['PYTHONHASHSEED'] = str(seed_value)
 
 
 if __name__ == '__main__':
+    figure = [plt.subplot(2, 2, i+1) for i in range(4)]
+    xPoint = np.array(i for i in np.arange(1, 2, 0.1))
+    yPoint = np.zeros((5, 3, 3, 20))
+    # [g][p][NOCs][b]:
 
-    for _g in [10, 100, 1000, G1+G2]:
-        for _b in np.arange(1, 2, 0.1):
-            for _p in [0.3, 0.8]:
-                fc_ER = fc_SF = 0
+    for i in range(len(glist)):
+        for j in range(len(blist)):
+            for k in range(len(plist)):
+                fc = [0, 0]  # ER, SF
                 for _Graph in range(DiffGraph):
                     NOCs_ER = nx.erdos_renyi_graph(N, ER_p)
                     NOCs_SF = nx.barabasi_albert_graph(N, m)
+                    playersInit()
+                    fc[0] += EvolutionGameProcess(NOCs_ER, "PD", glist[i], blist[j], plist[k])  # 均为囚徒博弈
+                    playersInit()
+                    fc[1] += EvolutionGameProcess(NOCs_SF, "PD", glist[i], blist[j], plist[k])
+                for NOCs in range(2):
+                    fc[NOCs] /= DiffGraph
+                    yPoint[i][k][NOCs][j] = fc[NOCs]
+                    output2File("output.txt", "a", "g:{}; b:{}; p:{}; NOCs:{}; fc:{}".format(glist[i], blist[j], plist[k], NOCs, fc[NOCs]))
 
-                    fc_ER += EvolutionGameProcess(NOCs_ER, "PD", _b, _p, _g)  # 均为囚徒博弈
-                    fc_SF += EvolutionGameProcess(NOCs_SF, "PD", _b, _p, _g)
-                fc_ER /= DiffGraph
-                fc_SF /= DiffGraph
-
+    for g in range(len(glist)):
+        for i in range(4):
+            figure[i].plot(xPoint, yPoint[g][0 if i % 2 == 0 else 1][0 if i < 2 else 1], label="g = {}".format(glist[g]))
     plt.savefig('./temporal_network.jpg')
     plt.show()
-
