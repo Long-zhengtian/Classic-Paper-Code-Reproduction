@@ -23,21 +23,41 @@ if __name__ == '__main__':
     yPoint = np.zeros((5, 3, 3, 20))
     # [g][p][NOCs][b]:
 
-    for i in range(len(glist)):
-        for j in range(len(blist)):
-            for k in range(len(plist)):
-                fc = [0, 0]  # ER, SF
-                for _Graph in range(DiffGraph):
-                    NOCs_ER = nx.erdos_renyi_graph(N, ER_p)
-                    NOCs_SF = nx.barabasi_albert_graph(N, m)
+    # for i in range(len(glist)):
+    #     for j in range(len(blist)):
+    #         for k in range(len(plist)):
+    #             fc = [0, 0]  # ER, SF
+    #             for _Graph in range(DiffGraph):
+    #                 NOCs_ER = nx.erdos_renyi_graph(N, ER_p)
+    #                 NOCs_SF = nx.barabasi_albert_graph(N, m)
+    #                 playersInit()
+    #                 fc[0] += EvolutionGameProcess(NOCs_ER, "PD", glist[i], blist[j], plist[k])  # 均为囚徒博弈
+    #                 playersInit()
+    #                 fc[1] += EvolutionGameProcess(NOCs_SF, "PD", glist[i], blist[j], plist[k])
+    #             for NOCs in range(2):
+    #                 fc[NOCs] /= DiffGraph
+    #                 yPoint[i][k][NOCs][j] = fc[NOCs]
+    #                 output2File("output.txt", "a", "g:{}; b:{}; p:{}; NOCs:{}; fc:{}".format(glist[i], blist[j], plist[k], NOCs, fc[NOCs]))
+
+    for _Graph in range(DiffGraph):
+        NOCs_ER = nx.erdos_renyi_graph(N, ER_p)
+        NOCs_SF = nx.barabasi_albert_graph(N, m, m)
+        for i in range(len(glist)):  # 每个snapshot的演化次数
+            for j in range(len(blist)):  # 囚徒困境中的背叛者优势，横坐标
+                for k in range(len(plist)):  # 随机删边的概率
                     playersInit()
-                    fc[0] += EvolutionGameProcess(NOCs_ER, "PD", glist[i], blist[j], plist[k])  # 均为囚徒博弈
+                    yPoint[i][k][0][j] += EvolutionGameProcess(NOCs_ER, "PD", glist[i], blist[j], plist[k])  # 均为囚徒博弈
                     playersInit()
-                    fc[1] += EvolutionGameProcess(NOCs_SF, "PD", glist[i], blist[j], plist[k])
-                for NOCs in range(2):
-                    fc[NOCs] /= DiffGraph
-                    yPoint[i][k][NOCs][j] = fc[NOCs]
-                    output2File("output.txt", "a", "g:{}; b:{}; p:{}; NOCs:{}; fc:{}".format(glist[i], blist[j], plist[k], NOCs, fc[NOCs]))
+                    yPoint[i][k][1][j] += EvolutionGameProcess(NOCs_SF, "PD", glist[i], blist[j], plist[k])
+                    print(_Graph, i, j, k, yPoint[i][k][0][j], yPoint[i][k][1][j])
+
+    yPoint /= DiffGraph
+
+    for NOCs in range(2):
+        for i in range(len(glist)):
+            for j in range(len(blist)):
+                for k in range(len(plist)):
+                    output2File("output.txt", "a", "g:{}; b:{}; p:{}; NOCs:{}; fc:{}".format(glist[i], blist[j], plist[k], NOCs, yPoint[i][k][NOCs][j]))
 
     for g in range(len(glist)):
         for i in range(4):

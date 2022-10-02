@@ -39,7 +39,8 @@ if __name__ == '__main__':
                 for NOCs in range(2):
                     fc[NOCs] /= DiffGraph
                     yPoint[i][k][NOCs][j] = fc[NOCs]
-                    output2File("output.txt", "a", "g:{}; b:{}; p:{}; NOCs:{}; fc:{}".format(glist[i], blist[j], plist[k], NOCs, fc[NOCs]))
+                    output2File("output.txt", "a", "g:{}; b:{}; p:{}; NOCs:{}; fc:{}"
+                                .format(glist[i], blist[j], plist[k], NOCs, fc[NOCs]))
 
     for g in range(len(glist)):
         for i in range(4):

@@ -34,9 +34,6 @@ def strategyUpdate(x, y, _PayOff, Game, NOCs):  # 策略的更新过程
     players[x].newStrategy = players[x].strategy 
 
 
-# @jit(float64(Graph, string, float64))
-# @jit(nopython=True)
-# @ti.func()
 def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
     if Game == "PD":
         _PayOff = PayOff_PD(bORr)
@@ -67,9 +64,6 @@ def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
     return Temp / N
 
 
-# @jit(float64(Graph, string, float64, float64, float64))
-# @jit(nopython=True)
-# @ti.kernel()
 def EvolutionGameProcess(NOCs, Game, g, bORr, prob):
     fc = 0.
     with alive_bar(EG_Rounds * (G1 + G2), force_tty=True) as bar:

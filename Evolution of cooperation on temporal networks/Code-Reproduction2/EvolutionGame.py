@@ -8,7 +8,7 @@ import networkx
 import networkt
 # import taichi as ti
 # import taichi.math as tm
-from numba import jit
+from numba import jit, njit
 from player import players, playersInit
 from config import *
 from output import output2File
@@ -41,13 +41,7 @@ def strategyUpdate(x, y, _PayOff, Game, NOCs):  # 策略的更新过程
 # @ti.func()
 @jit
 def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
-    if Game == "PD":
-        _PayOff = PayOff_PD(bORr)
-    elif Game == "SG":
-        _PayOff = PayOff_SG(bORr)
-    else:
-        print("Error: GameType {} does not exit".format(Game))
-        return 0
+    _PayOff = PayOff(bORr)
 
     # 博弈收益
     for _id in range(N):
@@ -60,7 +54,7 @@ def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
             friend = random.choice(list(np.nonzero(NOCs[_id])))
             strategyUpdate(_id, friend, _PayOff, Game, NOCs)
 
-    Temp = int(0)
+    Temp = 0
     for _id in range(N):
         players[_id].AccPayOffs = 0  # 每轮都要清零一次
         players[_id].strategy = players[_id].newStrategy
@@ -73,7 +67,7 @@ def EvolutionGameStep(NOCs, Game, bORr):  # 一轮演化过程
 
 # @jit(float64(Graph, string, float64, float64, float64))
 # @ti.kernel()
-@jit
+@njit
 def EvolutionGameProcess(Mat, Game, g, bORr, prob):
     fc = 0.
     for _ in range(EG_Rounds):
@@ -84,7 +78,7 @@ def EvolutionGameProcess(Mat, Game, g, bORr, prob):
             for x in range(rows):
                 for y in range(cols):
                     if prob > random.random():
-                        snapshot[x, y] = 0
+                        snapshot[x, y] = snapshot[y, x] = 0
             for _j in range(_i, min(_i + g, G1 + G2)):
                 mean = EvolutionGameStep(snapshot, Game, bORr)
                 if _j > G1:
