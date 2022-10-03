@@ -4,13 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-from numba import jit
-from multiprocessing import pool
 from output import output2File
 from config import *
 from EvolutionGame3 import EvolutionGameProcess
 from player import playersInit, players
-from alive_progress import alive_bar
 
 random.seed(seed_value)
 np.random.seed(seed_value)
@@ -55,5 +52,5 @@ if __name__ == '__main__':
                 plt.ylabel("SF")
             else:
                 plt.xlabel("b")
-    plt.savefig('./temporal_network8000.jpg')
+    plt.savefig('./temporal_network'+str(N)+'N'+str(G1)+'G12'+'.jpg')
     plt.show()

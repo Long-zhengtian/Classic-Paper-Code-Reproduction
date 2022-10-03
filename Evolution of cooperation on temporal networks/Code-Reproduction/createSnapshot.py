@@ -11,7 +11,7 @@ nx.write_gpickle(SF_NOCs, "./Snapshot/SFNOCs_" + str(N) + "N_" + str(m) + "m_" +
 nx.write_gpickle(ER_NOCs, "./Snapshot/ERNOCs_" + str(N) + "N_" + str(ER_p) + "P_" + ".gpickle")
 
 for prob in [0.3, 0.8]:
-    for i in range(100):  # 构建100个SF子网络，节点个数为N
+    for i in range(1210):  # 构建100个SF子网络，节点个数为N
         for NOCs in [SF_NOCs, ER_NOCs]:
             snapshot = copy.deepcopy(NOCs)
             for e in snapshot.edges():
@@ -26,3 +26,17 @@ for prob in [0.3, 0.8]:
             else:
                 name = "./Snapshot/Error.txt"
             nx.write_gpickle(snapshot, name)
+
+# print(nx.read_gpickle("./Snapshot/SFNOCs_" + str(N) + "N_" + str(m) + "m_" + ".gpickle"))
+# print(nx.read_gpickle("./Snapshot/ERNOCs_" + str(N) + "N_" + str(ER_p) + "P_" + ".gpickle"))
+#
+# for prob in [0.3, 0.8]:
+#     for i in range(100):  # 构建100个SF子网络，节点个数为N
+#         for NOCs in [SF_NOCs, ER_NOCs]:
+#             if NOCs == SF_NOCs:
+#                 name = "./Snapshot/SFNOCs_" + str(N) + "N_" + str(m) + "m_" + str(prob) + "prob_" + str(i) + ".gpickle"
+#             elif NOCs == ER_NOCs:
+#                 name = "./Snapshot/ERNOCs_" + str(N) + "N_" + str(ER_p) + "P_" + str(prob) + "prob_" + str(i) + ".gpickle"
+#             else:
+#                 name = "./Snapshot/Error.txt"
+#             print(nx.read_gpickle(name))

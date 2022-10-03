@@ -1,14 +1,8 @@
 import random
-import copy
-import string
 
 import networkx as nx
-import tqdm
-import networkx
-# import taichi as ti
-# import taichi.math as tm
-# from numba import jit
-from player import players, playersInit
+import math
+from player import players
 from config import *
 from output import output2File
 from alive_progress import alive_bar
@@ -77,6 +71,8 @@ def readSnapshot(Rounds, g, NOCs, prob):
 def EvolutionGameProcess(NOCs, g, bORr, prob):
     fc = 0.
     snapshot = nx.empty_graph()
+    GameBalanceStart = 0.
+    GameBalanceEnd = 0.
     with alive_bar(EG_Rounds * (G1 + G2), force_tty=True) as bar:
         for _ in range(EG_Rounds):
             GTemp = 0.
@@ -87,7 +83,13 @@ def EvolutionGameProcess(NOCs, g, bORr, prob):
                 mean = EvolutionGameStep(snapshot, bORr)
                 if _i > G1:
                     GTemp += mean
+                if _i == G1:
+                    GameBalanceStart = mean
+                if _i == G1 + G2 - 1:
+                    GameBalanceEnd = mean
             GTemp /= G2
             fc += GTemp
+            if abs(GameBalanceEnd - GameBalanceStart) > 0.1:
+                print("NO BALANCE!{}".format(GameBalanceEnd-GameBalanceStart))
     fc /= EG_Rounds
     return fc
