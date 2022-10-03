@@ -28,13 +28,6 @@ if __name__ == '__main__':
                 yPoint[i][k][1][j] += EvolutionGameProcess("SF", glist[i], blist[j], plist[k])
                 print(glist[i], blist[j], plist[k], yPoint[i][k][0][j], yPoint[i][k][1][j])
 
-    for NOCs in range(2):
-        for i in range(len(glist)):
-            for j in range(len(blist)):
-                for k in range(len(plist)):
-                    output2File("output.txt", "a", "g:{}; b:{}; p:{}; NOCs:{}; fc:{}"
-                                .format(glist[i], blist[j], plist[k], NOCs, yPoint[i][k][NOCs][j]))
-
     for g in range(len(glist)):
         for i in range(4):
             subfig = 22 * 10 + i + 1
