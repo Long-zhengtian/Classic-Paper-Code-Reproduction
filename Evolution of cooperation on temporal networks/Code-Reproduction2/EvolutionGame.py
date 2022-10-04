@@ -69,27 +69,12 @@ def readSnapshot(Rounds, g, NOCs, prob):
 
 
 def EvolutionGameProcess(NOCs, g, bORr, prob):
-    fc = 0.
+    fc = np.zeros(G1)
     snapshot = nx.empty_graph()
-    GameBalanceStart = 0.
-    GameBalanceEnd = 0.
-    with alive_bar(EG_Rounds * (G1 + G2), force_tty=True) as bar:
-        for _ in range(EG_Rounds):
-            GTemp = 0.
-            for _i in range(G1 + G2):
-                bar()
-                if _i % g == 0:
-                    snapshot = readSnapshot(_i, g, NOCs, prob)
-                mean = EvolutionGameStep(snapshot, bORr)
-                if _i > G1:
-                    GTemp += mean
-                if _i == G1:
-                    GameBalanceStart = mean
-                if _i == G1 + G2 - 1:
-                    GameBalanceEnd = mean
-            GTemp /= G2
-            fc += GTemp
-            if abs(GameBalanceEnd - GameBalanceStart) > 0.1:
-                print("NO BALANCE!{}".format(GameBalanceEnd-GameBalanceStart))
-    fc /= EG_Rounds
+    with alive_bar(G1, force_tty=True) as bar:
+        for _i in range(G1):
+            bar()
+            if _i % g == 0:
+                snapshot = readSnapshot(_i, g, NOCs, prob)
+            fc[_i] = EvolutionGameStep(snapshot, bORr)
     return fc
