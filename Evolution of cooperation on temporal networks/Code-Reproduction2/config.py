@@ -4,14 +4,14 @@ seed_value = 2022
 N = 1000  # 种群节点数量
 m = 5  # BA模型参数
 ER_p = 0.01  # ER图参数
-G1 = 20000  # 一共前置演化G1轮
+G1 = 10000  # 一共前置演化G1轮
 G2 = 500  # 平衡后，演化G2轮
 # g = 10  # 一个snapshot演化的轮数
 DiffGraph = 1  # 跑DiffGraph个不同的图，取平均值
 EG_Rounds = 10  # 每个图跑MeanStep次
-glist = [10, 100, 1000, G1+G2]  # glist = [10, 100, 1000, G1+G2]
+glist = [G1+G2]  # glist = [10, 100, 1000, G1+G2]
 blist = [1.2]  # blist = [i for i in np.arange(1, 2, 0.1)]
-plist = [0.3, 0.8]  # plist = [0.3, 0.8]
+plist = [0.3]  # plist = [0.3, 0.8]
 
 
 class PayOff_PD:  # 囚徒博弈的得失情况
