@@ -3,7 +3,7 @@ from config import *
 from output import output2File
 
 class Player():  # 博弈双方对象
-    def __init__(self, index, strategy, AccPayOffs = 0):
+    def __init__(self, index, strategy, AccPayOffs=0):
         self.index = index  # 序号
         self.strategy = strategy  # 选择的博弈策略，True表示合作，False表示对抗
         self.newStrategy = strategy  # 策略更新

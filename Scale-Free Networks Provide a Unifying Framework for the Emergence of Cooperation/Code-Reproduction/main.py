@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
         ax1 = plt.subplot(2, 2, 1)
         plt.title("Prisoner’s Dilemma")
-        plt.plot(xpoint, ypoint, marker = 'o', ms = 3, label = "z = {}".format(_k))
+        plt.plot(xpoint, ypoint, marker='o', ms=3, label="z = {}".format(_k))
 
         print("regular_ring_NOCs, SG")
         xpoint.clear()
